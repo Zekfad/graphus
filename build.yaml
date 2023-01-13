@@ -1,0 +1,14 @@
+# Read about `build.yaml` at https://pub.dev/packages/build_config
+targets:
+  # Debug generators
+  $default:
+    # Run only specified builders
+    auto_apply_builders: false
+    builders: {}
+  auto_route:
+    # Run only specified builders
+    auto_apply_builders: false
+    builders:
+      auto_route_generator|autoRouteGenerator:
+        generate_for:
+          - lib/app_router/*.dart

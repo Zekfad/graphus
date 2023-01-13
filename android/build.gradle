@@ -1,0 +1,50 @@
+buildscript {
+    ext.kotlin_version = '1.8.0'
+    // For updates look here: https://mvnrepository.com/artifact/com.android.tools.build/gradle?repo=google
+    ext.gradle_build_tools_version = '7.3.1'
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "com.android.tools.build:gradle:$gradle_build_tools_version"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.buildDir = '../build'
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+}
+subprojects {
+    project.evaluationDependsOn(':app')
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+// Runtime JAR files in the classpath should have the same version.
+configurations.all {
+    List<String> kotlin_dependencies = [
+        'kotlin-stdlib',
+        'kotlin-stdlib-jdk7',
+        'kotlin-stdlib-jdk8',
+        'kotlin-stdlib-common'
+    ]
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+        if (details.requested.group == 'org.jetbrains.kotlin') {
+            if (kotlin_dependencies.contains(details.requested.name)) {
+                details.useVersion kotlinVersion
+            }
+        }
+    }
+}

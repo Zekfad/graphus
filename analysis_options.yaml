@@ -1,0 +1,5 @@
+include: package:zekfad_lints/untyped/flutter.yaml
+analyzer:
+  enable-experiment:
+    - records
+    - patterns
